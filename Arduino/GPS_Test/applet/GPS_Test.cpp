@@ -100,9 +100,9 @@ void getgps(TinyGPS &gps)
   // the TinyGPS and NewSoftSerial libs.
   
   // Define the variables that will be used
-  float latitude, longitude;
+  long latitude, longitude;
   // Then call this function
-  gps.f_get_position(&latitude, &longitude);
+  gps.get_position(&latitude, &longitude);
   // You can now print variables latitude and longitude
   Serial.print("Lat/Long: "); 
   Serial.print(latitude); 
