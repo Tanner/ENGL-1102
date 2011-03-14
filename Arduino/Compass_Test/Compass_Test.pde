@@ -14,6 +14,12 @@ int i, headingValue;
 //SCL = Analog 5
 //SDA = Analog 4
 
+//Code from
+//http://forum.sparkfun.com/viewtopic.php?t=6236
+
+//http://bildr.org/2011/01/hmc6352/
+//http://www.recombine.net/blog/article/49/hmc6352-sparkfun-compass-and-arduino
+
 void setup()
 {
   // Shift the device's documented slave address (0x42) 1 bit right
