@@ -2,6 +2,9 @@
 #include <NewSoftSerial.h>
 #include <TinyGPS.h>
 
+#include "WProgram.h"
+void setup();
+void loop();
 int HMC6352Address = 0x42;
 int slaveAddress, headingValue;
 byte headingData[2];
@@ -82,3 +85,16 @@ void loop()
   
   delay(500);
 }
+
+int main(void)
+{
+	init();
+
+	setup();
+    
+	for (;;)
+		loop();
+        
+	return 0;
+}
+
