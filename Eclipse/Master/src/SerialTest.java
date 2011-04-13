@@ -6,6 +6,9 @@ import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener; 
 import java.util.Enumeration;
 
+/**
+ * Credit to http://www.arduino.cc/playground/Interfacing/Java
+ */
 public class SerialTest implements SerialPortEventListener {
 	SerialPort serialPort;
 	private static final String PORT_NAMES[] = { 
