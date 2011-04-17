@@ -10,6 +10,8 @@ byte headingData[2];
 #define TXPIN 3
 #define GPSBAUD 4800
 
+#define HUMAN_READABLE 0
+
 TinyGPS gps;
 NewSoftSerial uart_gps(RXPIN, TXPIN);
 
@@ -63,22 +65,31 @@ void loop()
       int c = uart_gps.read();    // load the data into a variable...
       if(gps.encode(c))      // if there is a new valid sentence...
       {
-        Serial.println(c);
         gps.get_position(&latitude, &longitude);
       }
   }
 
   headingValue = headingData[0]*256 + headingData[1];  // Put the MSB and LSB together
-  Serial.print("Lat/Long: "); 
-  Serial.print(latitude); 
-  Serial.print(", "); 
-  Serial.println(longitude);
   
-  Serial.print("Current heading: ");
-  Serial.print(int (headingValue / 10));     // The whole number part of the heading
-  Serial.print(".");
-  Serial.print(int (headingValue % 10));     // The fractional part of the heading
-  Serial.println(" degrees");
+  if (HUMAN_READABLE == 1) {
+    Serial.print("Lat/Long: "); 
+    Serial.print(latitude); 
+    Serial.print(", "); 
+    Serial.println(longitude);
+    
+    Serial.print("Current heading: ");
+    Serial.print(int (headingValue / 10));     // The whole number part of the heading
+    Serial.print(".");
+    Serial.print(int (headingValue % 10));     // The fractional part of the heading
+    Serial.println(" degrees");
+  } else {
+    Serial.print(latitude);
+    Serial.print(";");
+    Serial.print(longitude);
+    Serial.print(";");
+    Serial.print((int)(headingValue / 10));
+    Serial.println(";;");
+  }
   
   delay(500);
 }
