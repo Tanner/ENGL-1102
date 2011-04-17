@@ -108,6 +108,7 @@ void loop()
         digitalWrite(centerMotor, 0);
         digitalWrite(rightMotor, 255);
       }
+    }
   } else {
     digitalWrite(leftMotor, 0);
     digitalWrite(centerMotor, 255);
