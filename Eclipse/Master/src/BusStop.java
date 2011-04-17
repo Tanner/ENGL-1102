@@ -1,6 +1,6 @@
 public class BusStop implements Comparable {
-	private int latitude;
-	private int longitude;
+	private double latitude;
+	private double longitude;
 	
 	private String stopCode;
 	private String humanReadable;
@@ -8,23 +8,23 @@ public class BusStop implements Comparable {
 	private int distance;
 	private int timeUntilNextBus;
 	
-	public BusStop(int latitude, int longitude, String stopCode) {
+	public BusStop(double latitude, double longitude, String stopCode) {
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.stopCode = stopCode;
 	}
 	
-	public BusStop(int latitude, int longitude, String stopCode, String humanReadable) {
+	public BusStop(double latitude, double longitude, String stopCode, String humanReadable) {
 		this(latitude, longitude, stopCode);
 		
 		this.humanReadable = humanReadable;
 	}
 	
-	public int getLatitude() {
+	public double getLatitude() {
 		return latitude;
 	}
 	
-	public int getLongitude() {
+	public double getLongitude() {
 		return longitude;
 	}
 	
