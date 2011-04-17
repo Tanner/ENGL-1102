@@ -100,12 +100,12 @@ public class SerialTest implements SerialPortEventListener {
 				String[] split = serialString.split(";+");
 				if (split[0].equals(START_DELIM) && split.length >= 3) {
 					//We're in our string so shoot!
-					int latitude = Integer.valueOf(split[1]);
-					int longitude = Integer.valueOf(split[2]);
+					double latitude = Integer.valueOf(split[1]) / 100000;
+					double longitude = Integer.valueOf(split[2]) / 100000;
 					System.out.println("("+latitude+", "+longitude+")");
 					
 					if (output != null) {
-//						output.write(DataScrape.getOptimumBusDirection(latitude, longitude));
+						output.write(DataScrape.getOptimumBusDirection(latitude, longitude));
 					}
 				}
 			} catch (Exception e) {
