@@ -12,14 +12,14 @@ import java.util.Enumeration;
 public class SerialTest implements SerialPortEventListener {
 	SerialPort serialPort;
 	private static final String PORT_NAMES[] = { 
-			"/dev/tty.usbserial-A9007UX1", // Mac OS X
+			"/dev/cu.usbserial-A900adLk", // Mac OS X
 			"/dev/ttyUSB0", // Linux
 			"COM3", // Windows
 			};
 	private InputStream input;
 	private OutputStream output;
 	private static final int TIME_OUT = 2000;
-	private static final int DATA_RATE = 9600;
+	private static final int DATA_RATE = 115200;
 
 	public static void main(String[] args) throws Exception {
 		SerialTest main = new SerialTest();
