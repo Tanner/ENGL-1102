@@ -73,6 +73,7 @@ void loop()
   }
 
   headingValue = headingData[0]*256 + headingData[1];  // Put the MSB and LSB together
+  
   if (HUMAN_READABLE == 1) {
     Serial.print("Lat/Long: "); 
     Serial.print(latitude); 
@@ -85,13 +86,19 @@ void loop()
     Serial.print(int (headingValue % 10));     // The fractional part of the heading
     Serial.println(" degrees");
   } else {
+    Serial.print("ENGL1102&;");
     Serial.print(latitude);
     Serial.print(";");
     Serial.print(longitude);
-    Serial.print(";");
-    Serial.print((int)(headingValue / 10));
     Serial.println(";;");
   }
+  
+  /*if (Serial.available()) {
+    byte incomingByte = Serial.read();
+
+    Serial.print("I received: ");
+    Serial.println(incomingByte, DEC);
+  }*/
   
   delay(500);
 }
