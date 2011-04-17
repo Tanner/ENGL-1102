@@ -32,27 +32,17 @@ public class DataScrape {
 		new BusStop(0, 0, "centrstud", "Student Center"),
 		new BusStop(0, 0, "765femrt", "CRC")
 	};
-
-	public static void main(String [] args) {
-		int gpsX = 1;
-		int gpsY = 1;
-		
+	
+	public static int getOptimumBusDirection(int x, int y) {
 		for (BusStop stop : busStops) {
 			stop.setTimeUntilNextBus(getBusUrgency(stop));
 		}
 		
 		Arrays.sort(busStops);
 		
-		for (BusStop stop : busStops) {
-			System.out.println(stop);
-		}
-		System.out.println();
-		
 		BusStop closestStop = busStops[0];
-		
-		System.out.println("Optimum Bus Stop:");
-		System.out.println(closestStop);
-		System.out.println("Direction: "+getBusDirection(gpsX, gpsY, closestStop));
+	
+		return getBusDirection(x, y, closestStop);
 	}
 
 	public static int getBusDirection(int gpsX, int gpsY) {
