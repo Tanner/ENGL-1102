@@ -10,6 +10,7 @@ import java.util.Enumeration;
  * Credit to http://www.arduino.cc/playground/Interfacing/Java
  */
 public class SerialTest implements SerialPortEventListener {
+	
 	SerialPort serialPort;
 	private static final String PORT_NAMES[] = { 
 			"/dev/cu.usbserial-A900adLk", // Mac OS X
@@ -20,6 +21,8 @@ public class SerialTest implements SerialPortEventListener {
 	private OutputStream output;
 	private static final int TIME_OUT = 2000;
 	private static final int DATA_RATE = 115200;
+	
+	private static final String START_DELIM = "ENGL1102&";
 
 	public static void main(String[] args) throws Exception {
 		SerialTest main = new SerialTest();
@@ -92,8 +95,19 @@ public class SerialTest implements SerialPortEventListener {
 				byte chunk[] = new byte[available];
 				input.read(chunk, 0, available);
 
-				// Displayed results are codepage dependent
-				System.out.print(new String(chunk));
+				String serialString = new String(chunk);
+				
+				String[] split = serialString.split(";+");
+				if (split[0].equals(START_DELIM) && split.length >= 3) {
+					//We're in our string so shoot!
+					int latitude = Integer.valueOf(split[1]);
+					int longitude = Integer.valueOf(split[2]);
+					System.out.println("("+latitude+", "+longitude+")");
+					
+					if (output != null) {
+//						output.write(DataScrape.getOptimumBusDirection(latitude, longitude));
+					}
+				}
 			} catch (Exception e) {
 				System.err.println(e.toString());
 			}
