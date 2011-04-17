@@ -12,7 +12,7 @@ byte headingData[2];
 
 #define HUMAN_READABLE 0
 
-#define TOLERANCE 10;
+int TOLERANCE = 10;
 
 int leftMotor = 4;
 int centerMotor = 5;
@@ -98,7 +98,7 @@ void loop()
     int desiredHeading = (byte)Serial.read();
     
     int difference = desiredHeading - headingValue;
-    if (abs(difference) > TOLERANCE) {
+    if (difference > TOLERANCE) {
       if (difference < 0) {
         digitalWrite(leftMotor, 255);
         digitalWrite(centerMotor, 0);
