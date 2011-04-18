@@ -96,21 +96,30 @@ public class SerialTest implements SerialPortEventListener {
 				input.read(chunk, 0, available);
 
 				String serialString = new String(chunk);
+				System.out.println("Received: "+serialString);
 				
 				String[] split = serialString.split(";+");
 				if (split[0].equals(START_DELIM) && split.length >= 3) {
+					System.out.println("Got data!");
 					//We're in our string so shoot!
-					double latitude = Integer.valueOf(split[1]) / 100000;
-					double longitude = Integer.valueOf(split[2]) / 100000;
-					System.out.println("("+latitude+", "+longitude+")");
-					
-					if (output != null) {
-						output.write(DataScrape.getOptimumBusDirection(latitude, longitude));
+					try {
+						System.out.println("1: "+split[1]+" 2: "+split[2]);
+						double latitude = Integer.valueOf(split[1]) / 100000;
+						double longitude = Integer.valueOf(split[2]) / 100000;
+						System.out.println("("+latitude+", "+longitude+")");
+						
+						int optimalHeading = DataScrape.getOptimumBusDirection(latitude, longitude);
+						System.out.println("Sending... "+optimalHeading);
+						output.write(optimalHeading);
+					} catch (Exception e) {
+						e.printStackTrace();
+						output.write(-1);
 					}
 				}
 			} catch (Exception e) {
 				System.err.println(e.toString());
 			}
+			System.out.println("=====================");
 		}
 		// Ignore all the other eventTypes, but you should consider the other ones.
 	}

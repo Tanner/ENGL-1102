@@ -109,9 +109,12 @@ public class DataScrape {
 		String cleanWebpage = Jsoup.parse(webpage).text();
 
 		if (cleanWebpage != null) {	
-			if (!(cleanWebpage.contains("No current prediction"))) {
+			if (!(cleanWebpage.contains("No current prediction")) && !(cleanWebpage.contains("No prediction"))) {
 				int index = cleanWebpage.indexOf("minute");
 				index = index - 3;
+				
+				System.out.println(cleanWebpage);
+				System.out.println(cleanWebpage.charAt(index));
 				
 				int urgency = Integer.parseInt(Character.toString(cleanWebpage.charAt(index)));
 				
