@@ -14,9 +14,9 @@ byte headingData[2];
 
 int TOLERANCE = 10;
 
-int leftMotor = 4;
-int centerMotor = 5;
-int rightMotor = 6;
+int leftMotor = 5;
+int centerMotor = 6;
+int rightMotor = 7;
 
 TinyGPS gps;
 NewSoftSerial uart_gps(RXPIN, TXPIN);
@@ -41,6 +41,36 @@ void setup()
   pinMode(leftMotor, OUTPUT);
   pinMode(centerMotor, OUTPUT);
   pinMode(rightMotor, OUTPUT);
+  
+  //Self Test
+  
+  digitalWrite(leftMotor, 255);
+  digitalWrite(centerMotor, 0);
+  digitalWrite(rightMotor, 0);
+  
+  delay(1000);
+  
+  digitalWrite(leftMotor, 0);
+  digitalWrite(centerMotor, 255);
+  digitalWrite(rightMotor, 0);
+  
+  delay(1000);
+  
+  digitalWrite(leftMotor, 0);
+  digitalWrite(centerMotor, 0);
+  digitalWrite(rightMotor, 255);
+  
+  delay(1000);
+  
+  digitalWrite(leftMotor, 255);
+  digitalWrite(centerMotor, 255);
+  digitalWrite(rightMotor, 255);
+  
+  delay(1000);
+  
+  digitalWrite(leftMotor, 0);
+  digitalWrite(centerMotor, 0);
+  digitalWrite(rightMotor, 0);
   
   Serial.begin(115200);
   
