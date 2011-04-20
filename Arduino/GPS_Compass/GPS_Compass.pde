@@ -14,9 +14,9 @@ byte headingData[2];
 
 int TOLERANCE = 10;
 
-int leftMotor = 5;
+int leftMotor = 7; //5
 int centerMotor = 6;
-int rightMotor = 7;
+int rightMotor = 5; //7
 
 TinyGPS gps;
 NewSoftSerial uart_gps(RXPIN, TXPIN);
@@ -133,6 +133,10 @@ void loop()
     Serial.println(desiredHeading);
     
     int difference = desiredHeading - (headingValue / 10);
+    
+    Serial.print("Difference: ");
+    Serial.println(difference);
+    
     if (abs(difference) > TOLERANCE) {
       if (difference < 0) {
         digitalWrite(leftMotor, 255);
@@ -143,11 +147,11 @@ void loop()
         digitalWrite(centerMotor, 0);
         digitalWrite(rightMotor, 255);
       }
+    } else {
+      digitalWrite(leftMotor, 0);
+      digitalWrite(centerMotor, 255);
+      digitalWrite(rightMotor, 0);
     }
-  } else {
-    digitalWrite(leftMotor, 0);
-    digitalWrite(centerMotor, 255);
-    digitalWrite(rightMotor, 0);
   }
   
   delay(500);
