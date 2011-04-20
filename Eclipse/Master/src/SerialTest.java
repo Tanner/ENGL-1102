@@ -112,7 +112,7 @@ public class SerialTest implements SerialPortEventListener {
 						
 						int optimalHeading = DataScrape.getOptimumBusDirection(latitude, longitude);
 						
-						if (SIMULATION) optimalHeading = 0;
+						if (SIMULATION) optimalHeading = 90;
 						
 						System.out.println("Sending... "+optimalHeading);
 						output.write(optimalHeading);
@@ -120,6 +120,11 @@ public class SerialTest implements SerialPortEventListener {
 						e.printStackTrace();
 						output.write(-1);
 					}
+				} else if (SIMULATION) {
+					int optimalHeading = 90;
+					
+					System.out.println("Sending... "+optimalHeading);
+					output.write(optimalHeading);
 				}
 			} catch (Exception e) {
 				System.err.println(e.toString());
