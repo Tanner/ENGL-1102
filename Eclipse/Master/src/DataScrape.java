@@ -113,9 +113,6 @@ public class DataScrape {
 				int index = cleanWebpage.indexOf("minute");
 				index = index - 3;
 				
-				System.out.println(cleanWebpage);
-				System.out.println(cleanWebpage.charAt(index));
-				
 				int urgency = Integer.parseInt(Character.toString(cleanWebpage.charAt(index)));
 				
 				try {

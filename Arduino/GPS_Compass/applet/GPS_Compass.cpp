@@ -15,6 +15,12 @@ byte headingData[2];
 
 #define HUMAN_READABLE 0
 
+int TOLERANCE = 10;
+
+int leftMotor = 5;
+int centerMotor = 6;
+int rightMotor = 7;
+
 TinyGPS gps;
 NewSoftSerial uart_gps(RXPIN, TXPIN);
 
@@ -33,10 +39,41 @@ void getgps(TinyGPS &gps);
 //http://www.recombine.net/blog/article/49/hmc6352-sparkfun-compass-and-arduino
 void setup()
 {
-  // Shift the device's documented slave address (0x42) 1 bit right
-  // This compensates for how the TWI library only wants the
-  // 7 most significant bits (with the high bit padded with 0)
   slaveAddress = HMC6352Address >> 1;
+  
+  pinMode(leftMotor, OUTPUT);
+  pinMode(centerMotor, OUTPUT);
+  pinMode(rightMotor, OUTPUT);
+  
+  //Self Test
+  
+  digitalWrite(leftMotor, 255);
+  digitalWrite(centerMotor, 0);
+  digitalWrite(rightMotor, 0);
+  
+  delay(1000);
+  
+  digitalWrite(leftMotor, 0);
+  digitalWrite(centerMotor, 255);
+  digitalWrite(rightMotor, 0);
+  
+  delay(1000);
+  
+  digitalWrite(leftMotor, 0);
+  digitalWrite(centerMotor, 0);
+  digitalWrite(rightMotor, 255);
+  
+  delay(1000);
+  
+  digitalWrite(leftMotor, 255);
+  digitalWrite(centerMotor, 255);
+  digitalWrite(rightMotor, 255);
+  
+  delay(1000);
+  
+  digitalWrite(leftMotor, 0);
+  digitalWrite(centerMotor, 0);
+  digitalWrite(rightMotor, 0);
   
   Serial.begin(115200);
   
@@ -45,17 +82,14 @@ void setup()
 }
 
 void loop()
-{ 
-  // Send a "A" command to the HMC6352
+{
   // This requests the current heading data
   Wire.beginTransmission(slaveAddress);
-  Wire.send("A");              // The "Get Data" command
+  Wire.send("A"); //Get data
   Wire.endTransmission(); 
-  delay(10);                   // The HMC6352 needs at least a 70us (microsecond) delay after this command.  Using 10ms just makes it safe
+  delay(10);
   
-  // Read the 2 heading bytes, MSB first
-  // The resulting 16bit word is the compass heading in 10th's of a degree
-  Wire.requestFrom(slaveAddress, 2);        // Request the 2 byte heading (MSB comes first)
+  Wire.requestFrom(slaveAddress, 2);
   int i = 0;
   while(Wire.available() && i < 2) 
   {  
@@ -63,16 +97,16 @@ void loop()
     i++;
   }
   
-  while(uart_gps.available())     // While there is data on the RX pin...
+  while(uart_gps.available())
   {
-      int c = uart_gps.read();    // load the data into a variable...
-      if(gps.encode(c))      // if there is a new valid sentence...
+      int c = uart_gps.read();
+      if(gps.encode(c))
       {
         gps.get_position(&latitude, &longitude);
       }
   }
 
-  headingValue = headingData[0]*256 + headingData[1];  // Put the MSB and LSB together
+  headingValue = headingData[0]*256 + headingData[1];
   
   if (HUMAN_READABLE == 1) {
     Serial.print("Lat/Long: "); 
@@ -93,12 +127,31 @@ void loop()
     Serial.println(";;");
   }
   
-  /*if (Serial.available()) {
-    byte incomingByte = Serial.read();
-
-    Serial.print("I received: ");
-    Serial.println(incomingByte, DEC);
-  }*/
+  Serial.print("Arduino compass: ");
+  Serial.println(int (headingValue / 10));
+  
+  if (Serial.available()) {
+    int desiredHeading = (byte)Serial.read();
+    Serial.print("Arduino has new data! - ");
+    Serial.println(desiredHeading);
+    
+    int difference = desiredHeading - (headingValue / 10);
+    if (abs(difference) > TOLERANCE) {
+      if (difference < 0) {
+        digitalWrite(leftMotor, 255);
+        digitalWrite(centerMotor, 0);
+        digitalWrite(rightMotor, 0);
+      } else {
+        digitalWrite(leftMotor, 0);
+        digitalWrite(centerMotor, 0);
+        digitalWrite(rightMotor, 255);
+      }
+    }
+  } else {
+    digitalWrite(leftMotor, 0);
+    digitalWrite(centerMotor, 255);
+    digitalWrite(rightMotor, 0);
+  }
   
   delay(500);
 }

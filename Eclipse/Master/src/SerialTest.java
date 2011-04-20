@@ -23,6 +23,8 @@ public class SerialTest implements SerialPortEventListener {
 	private static final int DATA_RATE = 115200;
 	
 	private static final String START_DELIM = "ENGL1102&";
+	
+	private static final boolean SIMULATION = true;
 
 	public static void main(String[] args) throws Exception {
 		SerialTest main = new SerialTest();
@@ -109,6 +111,9 @@ public class SerialTest implements SerialPortEventListener {
 						System.out.println("("+latitude+", "+longitude+")");
 						
 						int optimalHeading = DataScrape.getOptimumBusDirection(latitude, longitude);
+						
+						if (SIMULATION) optimalHeading = 0;
+						
 						System.out.println("Sending... "+optimalHeading);
 						output.write(optimalHeading);
 					} catch (Exception e) {

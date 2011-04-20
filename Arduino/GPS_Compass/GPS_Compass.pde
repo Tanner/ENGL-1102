@@ -124,11 +124,16 @@ void loop()
     Serial.println(";;");
   }
   
+  Serial.print("Arduino compass: ");
+  Serial.println(int (headingValue / 10));
+  
   if (Serial.available()) {
     int desiredHeading = (byte)Serial.read();
+    Serial.print("Arduino has new data! - ");
+    Serial.println(desiredHeading);
     
-    int difference = desiredHeading - headingValue;
-    if (difference > TOLERANCE) {
+    int difference = desiredHeading - (headingValue / 10);
+    if (abs(difference) > TOLERANCE) {
       if (difference < 0) {
         digitalWrite(leftMotor, 255);
         digitalWrite(centerMotor, 0);
