@@ -25,6 +25,12 @@ public class SerialTest implements SerialPortEventListener {
 	private static final String START_DELIM = "ENGL1102&";
 	
 	private static final boolean SIMULATION = true;
+	private static final boolean NORTH_SIMULATION = true;
+	
+	private static final int SIMULATED_HEADING = 90;
+	
+	private static final double SIMULATED_LAT = 33.773583;
+	private static final double SIMULATED_LONG = -84.396066;
 
 	public static void main(String[] args) throws Exception {
 		SerialTest main = new SerialTest();
@@ -93,6 +99,8 @@ public class SerialTest implements SerialPortEventListener {
 	public synchronized void serialEvent(SerialPortEvent oEvent) {
 		if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
 			try {
+				int optimalHeading = 0;
+				
 				int available = input.available();
 				byte chunk[] = new byte[available];
 				input.read(chunk, 0, available);
@@ -110,22 +118,25 @@ public class SerialTest implements SerialPortEventListener {
 						double longitude = Integer.valueOf(split[2]) / 100000;
 						System.out.println("("+latitude+", "+longitude+")");
 						
-						int optimalHeading = DataScrape.getOptimumBusDirection(latitude, longitude);
-						
-						if (SIMULATION) optimalHeading = 90;
-						
-						System.out.println("Sending... "+optimalHeading);
-						output.write(optimalHeading);
+						if (SIMULATION && !NORTH_SIMULATION) {
+							optimalHeading = DataScrape.getOptimumBusDirection(SIMULATED_LAT, SIMULATED_LONG);
+						} else if (SIMULATION && NORTH_SIMULATION) {
+							optimalHeading = SIMULATED_HEADING;
+						} else {
+							optimalHeading = DataScrape.getOptimumBusDirection(latitude, longitude);
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						output.write(-1);
 					}
-				} else if (SIMULATION) {
-					int optimalHeading = 90;
-					
-					System.out.println("Sending... "+optimalHeading);
-					output.write(optimalHeading);
+				} else if (SIMULATION && NORTH_SIMULATION) {
+					optimalHeading = SIMULATED_HEADING;
+				} else if (SIMULATION && !NORTH_SIMULATION) {
+					optimalHeading = DataScrape.getOptimumBusDirection(SIMULATED_LAT, SIMULATED_LONG);
 				}
+				
+				System.out.println("Sending... "+optimalHeading);
+				output.write(optimalHeading);
 			} catch (Exception e) {
 				System.err.println(e.toString());
 			}
