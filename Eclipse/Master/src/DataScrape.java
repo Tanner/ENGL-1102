@@ -37,27 +37,30 @@ public class DataScrape {
 	public static int getOptimumBusDirection(double gpsLatitude, double gpsLongitude) {
 		for (BusStop stop : busStops) {
 			stop.setTimeUntilNextBus(getBusUrgency(stop));
+			stop.setDistance(calculateDistance(gpsLatitude, stop.getLatitude(), gpsLongitude, stop.getLongitude()));
 		}
 		
 		Arrays.sort(busStops);
 		
 		BusStop closestStop = busStops[0];
 	
-		return getBusDirection(gpsLatitude, gpsLongitude, closestStop);
+		return (int)getBusDirection(gpsLatitude, gpsLongitude, closestStop);
 	}
 
 	public static int getBusDirection(double gpsLatitude, double gpsLongitude) {
 		BusStop closestStop = getClosestStop(gpsLatitude, gpsLongitude);
 		
-		return getBusDirection(gpsLatitude, gpsLongitude, closestStop);
+		return (int)getBusDirection(gpsLatitude, gpsLongitude, closestStop);
 	}
 	
-	public static int getBusDirection(double gpsLatitude, double gpsLongitude, BusStop closestStop) {
+	public static double getBusDirection(double gpsLatitude, double gpsLongitude, BusStop closestStop) {
 		if (closestStop != null) {
-			return (int)Math.atan(Math.abs(gpsLongitude - closestStop.getLongitude()) / Math.abs(gpsLatitude - closestStop.getLatitude()));
+			double opp = Math.abs(gpsLongitude - closestStop.getLongitude());
+			double adj = Math.abs(gpsLatitude - closestStop.getLatitude());
+			return Math.atan(opp / adj) * (180 / Math.PI);
 		}
 		
-		return -1;
+		return 0;
 	}
 
 	private static BusStop getClosestStop(double gpsLatitude, double gpsLongitude) {
@@ -103,7 +106,7 @@ public class DataScrape {
 		}
 
 		if (webpage.equals("")) {
-			return -1;
+			return Integer.MAX_VALUE;
 		}
 
 		String cleanWebpage = Jsoup.parse(webpage).text();
@@ -123,11 +126,11 @@ public class DataScrape {
 				
 				return urgency;
 			} else if (!(cleanWebpage.contains("No current prediction"))) {
-				return 0;
+				return Integer.MAX_VALUE;
 			}
 		}
 		
-		return -1;
+		return Integer.MAX_VALUE;
 	}
 
 	public static double calculateDistance(double x1, double x2, double y1, double y2) {

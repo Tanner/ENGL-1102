@@ -5,7 +5,7 @@ public class BusStop implements Comparable {
 	private String stopCode;
 	private String humanReadable;
 	
-	private int distance;
+	private double distance;
 	private int timeUntilNextBus;
 	
 	public BusStop(double latitude, double longitude, String stopCode) {
@@ -32,11 +32,11 @@ public class BusStop implements Comparable {
 		return stopCode;
 	}
 	
-	public int getDistance() {
+	public double getDistance() {
 		return distance;
 	}
 	
-	public void setDistance(int dist) {
+	public void setDistance(double dist) {
 		distance = dist;
 	}
 	
@@ -58,7 +58,7 @@ public class BusStop implements Comparable {
 				return timeDifference;
 			}
 			
-			return distance - busStop.getDistance();
+			return (int)(distance - busStop.getDistance());
 		}
 		
 		return 1;
